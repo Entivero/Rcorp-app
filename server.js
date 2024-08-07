@@ -9,7 +9,6 @@ const PORT = process.env.PORT || 4000;
 app.use(express.static('public'));
 app.use(express.json());
 
-// Leer el archivo de Excel
 let worksheet;
 try {
     const workbook = xlsx.readFile(path.join(__dirname, 'data', 'ALL_LEADS.xlsx'));
@@ -52,7 +51,7 @@ app.post('/filter', (req, res) => {
             return res.status(404).send('No se encontraron datos que coincidan con los criterios.');
         }
 
-        // Incrementar el contador de descargas
+        
         filteredData = filteredData.map(row => {
             if (!row.DownloadCount) {
                 row.DownloadCount = 1;
@@ -62,7 +61,6 @@ app.post('/filter', (req, res) => {
             return row;
         });
 
-        // Escribir el archivo CSV
         const csvWriter = createObjectCsvWriter({
             path: 'filtered_leads.csv',
             header: Object.keys(filteredData[0]).map(key => ({ id: key, title: key }))
